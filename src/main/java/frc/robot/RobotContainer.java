@@ -25,6 +25,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubSystem;
 // import frc.robot.subsystems.Vision;
 import swervelib.SwerveInputStream;
+import frc.robot.subsystems.Shooter;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -45,7 +46,7 @@ public class RobotContainer {
   // private final EjectorSubsystem m_EjectorSubsystem = new EjectorSubsystem();
   // private final USBcamera camera = new UsbCamera(null);
   // public final Vision m_Vision = new Vision(drivebase, "limelight");
-
+  public final Shooter m_Shooter = new Shooter();
   
 
   private boolean slowMode = false;
@@ -116,6 +117,8 @@ public class RobotContainer {
     // m_driverController.a().onTrue(Sima.moveTo(OperatorConstants.FIRST_LEVEL));
     // m_driverController.b().onTrue(Sima.moveTo(OperatorConstants.SECOND_LEVEL));
     // m_driverController.x().onTrue(Sima.moveTo(OperatorConstants.THIRD_LEVEL));
+    m_driverController.leftTrigger(0.05)
+    .whileTrue(new RunCommand(() -> m_Shooter.setSpeed(m_driverController.getLeftTriggerAxis()* 0.4)));
 
     m_driverController.leftStick().
     whileTrue(new RunCommand(() -> Constants.OperatorConstants.presicionSpeed = Constants.OperatorConstants.precisionSpeedFinalValue))
