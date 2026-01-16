@@ -118,7 +118,13 @@ public class RobotContainer {
     // m_driverController.b().onTrue(Sima.moveTo(OperatorConstants.SECOND_LEVEL));
     // m_driverController.x().onTrue(Sima.moveTo(OperatorConstants.THIRD_LEVEL));
     m_driverController.leftTrigger(0.05)
-    .whileTrue(new RunCommand(() -> m_Shooter.setSpeed(m_driverController.getLeftTriggerAxis()* 0.4)));
+    .whileTrue(new RunCommand(() -> m_Shooter.setSpeed(m_driverController.getLeftTriggerAxis()* 0.4)))
+    .onFalse(new InstantCommand(() -> m_Shooter.setSpeed(0)));
+
+    m_driverController.rightTrigger(0.05)
+    .whileTrue(new RunCommand(() -> m_Shooter.setSpeed(m_driverController.getRightTriggerAxis()* -0.4)))
+    .onFalse(new InstantCommand(() -> m_Shooter.setSpeed(0)));
+
 
     m_driverController.leftStick().
     whileTrue(new RunCommand(() -> Constants.OperatorConstants.presicionSpeed = Constants.OperatorConstants.precisionSpeedFinalValue))
