@@ -46,10 +46,7 @@ public class RobotContainer {
   // private final EjectorSubsystem m_EjectorSubsystem = new EjectorSubsystem();
   // private final USBcamera camera = new UsbCamera(null);
   // public final Vision m_Vision = new Vision(drivebase, "limelight");
-  public final Shooter m_Shooter = new Shooter();
-  
-
-  private boolean slowMode = false;
+  public final Shooter Lebron_James = new Shooter();
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -118,12 +115,12 @@ public class RobotContainer {
     // m_driverController.b().onTrue(Sima.moveTo(OperatorConstants.SECOND_LEVEL));
     // m_driverController.x().onTrue(Sima.moveTo(OperatorConstants.THIRD_LEVEL));
     m_driverController.leftTrigger(0.05)
-    .whileTrue(new RunCommand(() -> m_Shooter.setSpeed(m_driverController.getLeftTriggerAxis()* 0.4)))
-    .onFalse(new InstantCommand(() -> m_Shooter.setSpeed(0)));
+    .whileTrue(new RunCommand(() -> Lebron_James.setSpeed(m_driverController.getLeftTriggerAxis()* 0.77)))
+    .onFalse(new InstantCommand(() -> Lebron_James.setSpeed(0)));
 
     m_driverController.rightTrigger(0.05)
-    .whileTrue(new RunCommand(() -> m_Shooter.setSpeed(m_driverController.getRightTriggerAxis()* -0.4)))
-    .onFalse(new InstantCommand(() -> m_Shooter.setSpeed(0)));
+    .whileTrue(new RunCommand(() ->  Lebron_James.setSpeed(m_driverController.getRightTriggerAxis()* -0.77)))
+    .onFalse(new InstantCommand(() ->  Lebron_James.setSpeed(0)));
 
 
     m_driverController.leftStick().
