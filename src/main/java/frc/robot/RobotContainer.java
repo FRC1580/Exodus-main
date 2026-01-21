@@ -22,6 +22,7 @@ import frc.robot.commands.ExampleCommand;
 // import frc.robot.subsystems.EjectorSubsystem;
 // import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubSystem;
 // import frc.robot.subsystems.Vision;
 import swervelib.SwerveInputStream;
@@ -46,7 +47,7 @@ public class RobotContainer {
   // private final EjectorSubsystem m_EjectorSubsystem = new EjectorSubsystem();
   // private final USBcamera camera = new UsbCamera(null);
   // public final Vision m_Vision = new Vision(drivebase, "limelight");
-  public final Shooter Lebron_James = new Shooter();
+  public final Intake razamar = new Intake();
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -127,6 +128,7 @@ public class RobotContainer {
     whileTrue(new RunCommand(() -> Constants.OperatorConstants.presicionSpeed = Constants.OperatorConstants.precisionSpeedFinalValue))
     .onFalse(new InstantCommand(() -> Constants.OperatorConstants.presicionSpeed = 1));
     
+    m_driverController.a().onTrue(razamar.setSpeed(0.03));
   }
     
     
