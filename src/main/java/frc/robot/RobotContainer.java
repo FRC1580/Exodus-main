@@ -23,7 +23,7 @@ import frc.robot.commands.ExampleCommand;
 // import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubSystem;
-// import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Vision;
 import swervelib.SwerveInputStream;
 
 /**
@@ -44,7 +44,7 @@ public class RobotContainer {
   // public final Elevator Sima = new Elevator();
   // private final EjectorSubsystem m_EjectorSubsystem = new EjectorSubsystem();
   // private final USBcamera camera = new UsbCamera(null);
-  // public final Vision m_Vision = new Vision(drivebase, "limelight");
+  public final Vision m_Vision = new Vision(drivebase, "limelight");
 
   
 
@@ -121,7 +121,7 @@ public class RobotContainer {
     whileTrue(new RunCommand(() -> Constants.OperatorConstants.presicionSpeed = Constants.OperatorConstants.precisionSpeedFinalValue))
     .onFalse(new InstantCommand(() -> Constants.OperatorConstants.presicionSpeed = 1));
     
-  }
+  
     
     
     // m_driverController.y().onTrue(Sima.moveTo(OperatorConstants.FOURTH_LEVEL));
@@ -145,13 +145,10 @@ public class RobotContainer {
     
 
     
-
-    // m_driverController.y().onTrue(m_Vision.getAlignToAprilTagCommand(drivebase));
-
-    // m_driverController.y().onTrue(m_Vision.getAlignToAprilTagCommand(drivebase));
+    m_driverController.y().onTrue(m_Vision.getAlignToAprilTagCommand(drivebase));
 
     // m_driverController.leftStick().onTrue(drivebase.driverobotoriented(new ChassisSpeeds(m_Vision.calculateSteer(), 0, 0)));
-
+}
   //   m_driverController.rightBumper()
   //     .whileTrue(m_EjectorSubsystem.InvertedVomit(m_driverController.getLeftTriggerAxis())) // Runs while button is held
   //     .onFalse(new InstantCommand(() -> m_EjectorSubsystem.stop(), m_EjectorSubsystem));   // Stops action when button is released  
