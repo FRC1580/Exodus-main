@@ -60,6 +60,9 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    NamedCommands.registerCommand("Shoot", m_EjectorSubsystem.Vomit(0.7));
+
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
     // HashMap<String, Command> eventMap = new HashMap<>();
