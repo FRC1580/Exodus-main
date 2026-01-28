@@ -18,7 +18,7 @@ public class Vision {
     // Yaw/rotation correction
     private static final double ROTATION_SCALE = 1; // tune as needed
     // Angle error threshold (radians) to start/stop rotating
-    private static final double ANGLE_THRESHOLD_RADIANS = Math.toRadians(2.0); // ~2 degrees
+    private static final double ANGLE_THRESHOLD_RADIANS = 0.03; // ~2 degrees
 
     public Vision(SwerveSubSystem swerve, String limelightName) {
         this.swerve = swerve;
@@ -39,6 +39,11 @@ public class Vision {
     public Pose3d getAprilTagPose() {
         // Be defensive: may return null if no target
         return LimelightHelpers.getTargetPose3d_CameraSpace(limelightName);
+    }
+
+    public double getAngleRadians() {
+        Pose3d tagPose = getAprilTagPose();
+        return (Math.atan2(tagPose.getX(),tagPose.getZ()));
     }
 
     public double getX() {
@@ -91,28 +96,26 @@ public class Vision {
 
         // Translate toward tag (scale applied)
         // Depending on your field orientation, you may need to invert x/y.
-        double forwardSpeed = -x * TRANSLATION_SCALE; // negative if positive x means tag is ahead
+        double forwardSpeed = x * TRANSLATION_SCALE; // negative if positive x means tag is ahead
         double strafeSpeed  = y * TRANSLATION_SCALE; // adjust sign as needed for your frame
 
         // Rotation: try to align yaw to face the tag (use Z of Rotation3d as yaw)
-        double yawError = tagPose.getRotation().getZ(); // radians
+        double yawError = getAngleRadians(); // radians
         double rotationalSpeed = 0.0;
-        
-        System.out.println("nigger z nigger:" + yawError);
-        if (Math.abs(yawError) > ANGLE_THRESHOLD_RADIANS) {
-            rotationalSpeed = yawError * ROTATION_SCALE;
+        System.out.println("Angle: "+yawError);
+        if (yawError<0) {
+            yawError = -1;
         }
+        rotationalSpeed = -yawError * ROTATION_SCALE;
+        
 
         // Optional small cap on speeds to avoid overshoot
         double maxAbs = 1.0;
-        forwardSpeed = clamp(forwardSpeed, -maxAbs, maxAbs);
-        strafeSpeed  = clamp(strafeSpeed,  -maxAbs, maxAbs);
-        rotationalSpeed = clamp(rotationalSpeed, -maxAbs, maxAbs);
-
+        
         // If you want to bias linear velocities a bit (e.g., reduce when rotation is high),
         // you can apply additional logic here.
 
-        return new ChassisSpeeds(forwardSpeed, strafeSpeed, rotationalSpeed);
+        return new ChassisSpeeds(0, 0, rotationalSpeed);
     }
 
     private static double clamp(double v, double min, double max) {
@@ -123,6 +126,9 @@ public class Vision {
      * Moves the swerve drive toward and aligns to the detected AprilTag.
      */
     public void moveTowardAprilTag() {
+        System.out.println("Z: "+getAprilTagPose().getZ());//forward/back
+        System.out.println("X: "+getAprilTagPose().getX());//horizontal
+        System.out.println("Y: "+getAprilTagPose().getY());//vertical
         swerve.driveFieldOriented(getAprilTagMovement());
     }
 
@@ -147,9 +153,8 @@ public class Vision {
             .until(() -> {
                 Pose3d tagPose = getAprilTagPose();
                 if (tagPose != null) {
-                    double distance = getDistanceMeters();
-                    System.out.println("Distance to tag: " + distance);
-                    return distance <= DISTANCE_THRESHOLD_METERS;
+                    double distance = getAngleRadians();
+                    return distance <= ANGLE_THRESHOLD_RADIANS;
                 }
                 // If no target, keep running (or choose to stop)
                 return false;
