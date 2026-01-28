@@ -103,9 +103,6 @@ public class Vision {
         double yawError = getAngleRadians(); // radians
         double rotationalSpeed = 0.0;
         System.out.println("Angle: "+yawError);
-        if (yawError<0) {
-            yawError = -1;
-        }
         rotationalSpeed = -yawError * ROTATION_SCALE;
         
 
@@ -154,7 +151,8 @@ public class Vision {
                 Pose3d tagPose = getAprilTagPose();
                 if (tagPose != null) {
                     double distance = getAngleRadians();
-                    return distance <= ANGLE_THRESHOLD_RADIANS;
+                    
+                    return Math.abs(distance) <= ANGLE_THRESHOLD_RADIANS;
                 }
                 // If no target, keep running (or choose to stop)
                 return false;
