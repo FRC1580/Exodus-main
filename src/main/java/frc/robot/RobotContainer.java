@@ -145,7 +145,6 @@ public class RobotContainer {
     
 
     
-    m_driverController.y().onTrue(m_Vision.getAlignToAprilTagCommand(drivebase));
 
     // m_driverController.leftStick().onTrue(drivebase.driverobotoriented(new ChassisSpeeds(m_Vision.calculateSteer(), 0, 0)));
 }

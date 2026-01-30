@@ -16,7 +16,7 @@ public class Vision {
     // Translation speeds are scaled
     private static final double TRANSLATION_SCALE = 1; // tune as needed
     // Yaw/rotation correction
-    private static final double ROTATION_SCALE = 1; // tune as needed
+    private static final double ROTATION_SCALE = 1.5; // tune as needed
     // Angle error threshold (radians) to start/stop rotating
     private static final double ANGLE_THRESHOLD_RADIANS = 0.03; // ~2 degrees
 
@@ -137,26 +137,11 @@ public class Vision {
     }
 
     public void update() {
-        // Optional: lightweight debugging
-        System.out.println("AprilTag X: " + getX() + " Y: " + getY() + " Distance: " + getDistanceMeters());
+        Pose3d tagPose = getAprilTagPose();
+        if (tagPose != null && Math.abs(getAngleRadians()) > ANGLE_THRESHOLD_RADIANS) {
+            System.out.println("AprilTag detected at: " + tagPose);
+            moveTowardAprilTag();
+        }
     }
 
-    /**
-     * Returns a command to align to an AprilTag.
-     * This command continually moves the robot until it is close enough, then stops.
-     */
-    public Command getAlignToAprilTagCommand(SwerveSubSystem drivebase) {
-        return new RunCommand(() -> moveTowardAprilTag(), drivebase)
-            .until(() -> {
-                Pose3d tagPose = getAprilTagPose();
-                if (tagPose != null) {
-                    double distance = getAngleRadians();
-                    
-                    return Math.abs(distance) <= ANGLE_THRESHOLD_RADIANS;
-                }
-                // If no target, keep running (or choose to stop)
-                return false;
-            })
-            .finallyDo(interrupted -> stop());
-    }
 }
