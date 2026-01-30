@@ -74,35 +74,7 @@ public class Robot extends TimedRobot
    */
   @Override
   public void robotPeriodic() {
-
-    // camera = CameraServer.startAutomaticCapture();
-    
-    // // Optional: Set resolution and FPS
-    // camera.setResolution(640, 480);
-    // camera.setFPS(30);
-    //  Shuffleboard.getTab("Camera").add("USB Camera", CameraServer.getServer());
-    // if(!flag)
-    // {
-    //   m_robotContainer.Sima.reset();
-    //   flag = true;
-    // }
-    // m_robotContainer.Sima.update();
-    // SmartDashboard.putBoolean("is correct height", Constants.OperatorConstants.correctHeight);
-    
-    // camera = CameraServer.getServer(camera).startAutomaticCapture("camera",0);
-    // System.out.println("X pose of Vision"+m_robotContainer.m_Vision.getX());
-    // System.out.println("Y pose of Vision"+m_robotContainer.m_Vision.getY());
-    // System.out.println("Z pos of tagPose"+m_robotContainer.m_Vision.getZ());
-    // if(m_robotContainer.m_Vision.getDistance() < 0.43)
-    // {
-    //   m_robotContainer.drivebase.setDefaultCommand(m_robotContainer.driveFieldOrientedAngularVelocity);
-
-    // }
-
-    //SmartDashboard.putNumber("topleft", (topleft.getAbsolutePosition().getValueAsDouble()-0.189209)*360);
-    //SmartDashboard.putNumber("topright" , (topright.getAbsolutePosition().getValueAsDouble()-0.455566)*360);
-    //SmartDashboard.putNumber("bottomright", (bottomright.getAbsolutePosition().getValueAsDouble()-0.807373)*360);
-    //  SmartDashboard.putNumber("bottomleft", (bottomleft.getAbsolutePosition().getValueAsDouble()-0.151611)*360);
+    m_robotContainer.m_Vision.update();
     m_robotContainer.drivebase.zeroGyro();
 
 
