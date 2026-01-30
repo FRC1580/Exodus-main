@@ -18,7 +18,7 @@ public class Vision {
     // Yaw/rotation correction
     private static final double ROTATION_SCALE = 1.5; // tune as needed
     // Angle error threshold (radians) to start/stop rotating
-    private static final double ANGLE_THRESHOLD_RADIANS = 0.03; // ~2 degrees
+    private static final double ANGLE_THRESHOLD_RADIANS = 0.03;
 
     public Vision(SwerveSubSystem swerve, String limelightName) {
         this.swerve = swerve;
@@ -40,21 +40,46 @@ public class Vision {
         // Be defensive: may return null if no target
         return LimelightHelpers.getTargetPose3d_CameraSpace(limelightName);
     }
-
+    /*
+     * <summary>
+     * gets the horizontal angle to the apriltag in relation to the camera in radians
+     * </summary>
+     * @return double angle in radians
+     */
     public double getAngleRadians() {
         Pose3d tagPose = getAprilTagPose();
         return (Math.atan2(tagPose.getX(),tagPose.getZ()));
     }
 
+    /*
+     * <summary>
+     * gets the position of the apriltag in relation to the camera in the horizontal axis
+     * </summary>
+     * @return double X position in meters//TO DO: check correct measurement
+     */
     public double getX() {
         Pose3d tagPose = getAprilTagPose();
         return tagPose != null ? tagPose.getX() : 0.0;
     }
 
+    /*
+     * <summary>
+     * gets the position of the apriltag in relation to the camera in the vertical axis
+     * </summary>
+     * @return double Y position in meters//TO DO: check correct measurement
+     */
+
     public double getY() {
         Pose3d tagPose = getAprilTagPose();
         return tagPose != null ? tagPose.getY() : 0.0;
     }
+
+    /*
+     * <summary>
+     * gets the position of the apriltag in relation to the camera in the forward/backward direction
+     * </summary>
+     * @return double Z position in meters//TO DO: check correct measurement
+     */
 
     public double getZ() {
         Pose3d tagPose = getAprilTagPose();
@@ -83,8 +108,8 @@ public class Vision {
             return new ChassisSpeeds(0, 0, 0);
         }
 
-        double x = tagPose.getX(); // Forward/backward distance to tag
-        double y = tagPose.getY(); // Left/right distance to tag
+        double x = tagPose.getX();
+        double y = tagPose.getY();
 
         // Compute planar distance to tag
         double distance = Math.hypot(x, y);
@@ -102,7 +127,6 @@ public class Vision {
         // Rotation: try to align yaw to face the tag (use Z of Rotation3d as yaw)
         double yawError = getAngleRadians(); // radians
         double rotationalSpeed = 0.0;
-        System.out.println("Angle: "+yawError);
         rotationalSpeed = -yawError * ROTATION_SCALE;
         
 
@@ -123,9 +147,6 @@ public class Vision {
      * Moves the swerve drive toward and aligns to the detected AprilTag.
      */
     public void moveTowardAprilTag() {
-        System.out.println("Z: "+getAprilTagPose().getZ());//forward/back
-        System.out.println("X: "+getAprilTagPose().getX());//horizontal
-        System.out.println("Y: "+getAprilTagPose().getY());//vertical
         swerve.driveFieldOriented(getAprilTagMovement());
     }
 
@@ -135,11 +156,12 @@ public class Vision {
     public void stop() {
         swerve.driveFieldOriented(new ChassisSpeeds(0, 0, 0));
     }
-
+    /**
+     * Change this to add whatever changes or updates you want to happen periodically. (20ms)
+     */
     public void update() {
         Pose3d tagPose = getAprilTagPose();
         if (tagPose != null && Math.abs(getAngleRadians()) > ANGLE_THRESHOLD_RADIANS) {
-            System.out.println("AprilTag detected at: " + tagPose);
             moveTowardAprilTag();
         }
     }
